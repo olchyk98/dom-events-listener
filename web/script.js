@@ -4,7 +4,19 @@ const ELEMENTS = {
   messageText: document.querySelector('#message-text'),
 }
 
+/**
+ * Stores the last created listener id.
+ *
+ * @type {string|null}
+ * */
 let lastId = null
+
+/**
+ * If true, the display button currently has an active
+ * event click on it.
+ *
+ * @type {boolean}
+ * */
 let isListenerAdded = false
 
 /**
@@ -45,8 +57,10 @@ function removeListener () {
   isListenerAdded = false
 }
 
+/**
+ * Toggles button listener on click.
+ * */
 ELEMENTS.controlButton.addEventListener('click', () => {
-  // Toggles button listener
   if (!isListenerAdded) {
     addListener()
   } else {
