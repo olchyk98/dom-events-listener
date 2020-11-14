@@ -50,7 +50,16 @@ HTMLElement.prototype.removeEventListener = function (listenerId, ...props) {
 
   // Removes listener id from the cache
   // and retrieves cached listener information
-  const { eventName, callback } = clearListener(listenerId)
+  const listenerInfo = clearListener(listenerId)
+
+  // Throws a warning message if no listener with that id
+  if (!listenerInfo) {
+    console.warn(`Listener with that id does not exist: "${listenerId}"`)
+    return null
+  }
+
+  // Destructs values from the info object
+  const { eventName, callback } = listenerInfo
 
   // Calls the original function
   GENERIC_FUNCTIONS.removeEventListener.call(this, eventName, callback)
