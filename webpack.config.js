@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/node-events-listener.js',
@@ -20,4 +21,7 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({}),
+  ],
 }
