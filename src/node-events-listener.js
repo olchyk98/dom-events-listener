@@ -41,7 +41,13 @@ HTMLElement.prototype.addEventListener = function(name, callback, ...props) {
   return listenerId
 }
 
-HTMLElement.prototype.removeEventListener = function(listenerId) {
+HTMLElement.prototype.removeEventListener = function(listenerId, ...props) {
+  // More than one prop were passed. It means that user is trying
+  // to call the original removeEventListener
+  if(props.length) {
+    return GENERIC_FUNCTIONS.removeEventListener.call(this, ...arguments)
+  }
+
   // Removes listener id from the cache
   // and retrieves cached listener information
   const {eventName, callback} = clearListener(listenerId)
