@@ -86,9 +86,14 @@ export function extractTextContent (query) {
   return query.match(TEXTCONTENT_REGEX)?.[0].slice(1, -1) ?? null
 }
 
-// TODO: Second param -> where to mount
-// TODO: JSDOCS
-export const createQueryElement = document.createQueryElement = function (query) {
+/**
+ * Creates a HTML element based on the passed query.
+ *
+ * @param {string} query
+ * @param {HTMLElement|null} [parentNode] - if not null, the generated element will be mounted inside this node
+ * @return {HTMLElement}
+ * */
+export const createQueryElement = function (query, parentNode = null) {
   // Extracts element meta from the query
   const tag = extractTagName(query) || 'div'
   const classes = extractClasses(query)
@@ -106,10 +111,10 @@ export const createQueryElement = document.createQueryElement = function (query)
   })
 
   // Assigns id to the element
-  if(id) element.id = id
+  if (id) element.id = id
 
   // Assigns textContent to the element
-  if(textContent) element.textContent = textContent
+  if (textContent) element.textContent = textContent
 
   // Assigns attributes to the element
   attrs.forEach(({ key, value }) => {
@@ -121,6 +126,13 @@ export const createQueryElement = document.createQueryElement = function (query)
     element.style[key] = value
   })
 
+  // Mount the generated element in the passed parent node
+  if (parentNode) {
+    parentNode.appendChild(element)
+  }
+
   // Return the generated element
   return element
 }
+
+document.createQueryElement = createQueryElement
