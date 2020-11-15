@@ -1,0 +1,23 @@
+name: Tests
+
+on: [push]
+jobs:
+  build:
+    name: Application Tests (Jest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: borales/actions-yarn@v2.0.0
+        name: "Packages Install"
+        with:
+          cmd: install # will run `yarn install` command
+      - uses: borales/actions-yarn@v2.0.0
+        name: "Application Build"
+        with:
+          cmd: build # will run `yarn build` command
+        env:
+          CI: false
+      - uses: borales/actions-yarn@v2.0.0
+        name: "Application Tests"
+        with:
+          cmd: test # will run `yarn test` command
