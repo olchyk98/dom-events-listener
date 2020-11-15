@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
-  entry: './src/node-events-listener.js',
+  entry: './src/index.js',
   output: {
     filename: 'library-bundle.js',
     path: path.resolve(__dirname, 'dist'),
