@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, expect, it } from '@jest/globals'
-import { extractClasses, extractTagName } from '../src/create-query-element'
+import { extractClasses, extractTagName, extractId } from '../src/create-query-element'
 
 describe('Tests for createQueryElement function', () => {
   it('should properly recognize tag name [extractTagName]', () => {
@@ -37,5 +37,19 @@ describe('Tests for createQueryElement function', () => {
     const extClass = extractClasses(pay)
 
     expect(extClass).toEqual([ ])
+  })
+
+  it('should properly recognize id [extractId]', () => {
+    const pay = 'div#superid[attr]|background-color:blue;|'
+    const extId = extractId(pay)
+
+    expect(extId).toBe('superid')
+  })
+
+  it('should return null if there is no id [extractId]', () => {
+    const pay = 'div[isup=true]'
+    const extId = extractId(pay)
+
+    expect(extId).toBe(null)
   })
 })
