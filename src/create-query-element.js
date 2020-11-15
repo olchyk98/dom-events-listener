@@ -1,4 +1,5 @@
-const TAG_REGEX = /.+?(?=\W|$)/
+const TAG_REGEX = /^[A-Za-z]+?(?=\W)/g
+const CLASSES_REGEX = /\.[A-Za-z0-9_\-|.]+/g
 
 /**
  * Returns tag name that is used in the query,
@@ -8,5 +9,16 @@ const TAG_REGEX = /.+?(?=\W|$)/
  * @return {string|null}
  * */
 export function extractTagName (query) {
-  return query.match(TAG_REGEX)?.[0]
+  return query.match(TAG_REGEX)?.[0] ?? null
+}
+
+/**
+ * Returns all classnames that are presented in the query.
+ *
+ * @param {string} query
+ * @return {string[]}
+ * */
+export function extractClasses (query) {
+  const result = query.match(CLASSES_REGEX)?.[0] ?? String()
+  return result.split('.').filter(Boolean)
 }
