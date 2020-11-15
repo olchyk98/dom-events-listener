@@ -2,9 +2,10 @@ import { separateByPattern } from './utils'
 
 const TAG_REGEX = /^[A-Za-z]+?(?=\W)/g
 const CLASSES_REGEX = /\.[A-Za-z0-9_\-|.]+/g
-const ID_REGEX = /#[A-Za-z0-9_\-]+/g
+const ID_REGEX = /#[A-Za-z0-9_-]+/g
 const ATTRIBUTES_REGEX = /\[.+]/
 const STYLES_REGEX = /\|.+\|/
+const TEXTCONTENT_REGEX = /{.+}/
 
 /**
  * Returns tag name that is used in the query,
@@ -75,6 +76,16 @@ export function extractStyles (query) {
   )
 }
 
+/**
+ * Returns extracted textContent from the query.
+ *
+ * @param {string} query
+ * @return {string}
+ * */
+export function extractTextContent (query) {
+  return query.match(TEXTCONTENT_REGEX)?.[0].slice(1, -1) ?? null
+}
+
 // TODO: Second param -> where to mount
 // TODO: JSDOCS
 export const createQueryElement = document.createQueryElement = function (query) {
@@ -84,6 +95,7 @@ export const createQueryElement = document.createQueryElement = function (query)
   const id = extractId(query)
   const attrs = extractAttributes(query)
   const styles = extractStyles(query)
+  const textContent = extractTextContent(query)
 
   // Creates a new DOM element
   const element = document.createElement(tag)
@@ -94,7 +106,10 @@ export const createQueryElement = document.createQueryElement = function (query)
   })
 
   // Assigns id to the element
-  element.id = id
+  if(id) element.id = id
+
+  // Assigns textContent to the element
+  if(textContent) element.textContent = textContent
 
   // Assigns attributes to the element
   attrs.forEach(({ key, value }) => {

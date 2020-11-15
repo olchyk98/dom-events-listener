@@ -176,6 +176,20 @@ describe('e2e tests', () => {
     expect(element.id).toBe('crazy')
   })
 
+  it('createQueryElement function should correctly return an element based on query "span#crazyitem{This is The way}"', () => {
+    const payload = 'span#crazyitem{This is The way}'
+
+    // Generates element
+    const element = createQueryElement(payload)
+
+    // Checks if element tagname, id and textcontent is right
+    expect(element.tagName).toBe('SPAN')
+
+    expect(element.id).toBe('crazyitem')
+
+    expect(element.textContent).toBe('This is The way')
+  })
+
   it('createQueryElement function should correctly process a complex query and generate an element with right meta ', () => {
     const payload = 'span#superId.myclass1.myclass2[attr=2, isCool]|background:red; height:200px; width: 300px;|'
 
