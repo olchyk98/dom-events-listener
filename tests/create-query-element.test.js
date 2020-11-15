@@ -1,7 +1,10 @@
+import fs from 'fs'
+import path from 'path'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, expect, it } from '@jest/globals'
+import { JSDOM } from 'jsdom'
 import {
-  extractClasses, extractTagName, extractId, extractAttributes, extractStyles,
+  extractClasses, extractTagName, extractId, extractAttributes, extractStyles, createQueryElement,
 } from '../src/create-query-element'
 
 describe('.extractTagName', () => {
@@ -151,5 +154,51 @@ describe('.extractStyles', () => {
     const extId = extractStyles(pay)
 
     expect(extId).toStrictEqual([])
+  })
+})
+
+describe('e2e tests', () => {
+  // Generates DOM structure from the web index file
+  const fHTML = fs.readFileSync(path.join(__dirname, '../web/index.html'))
+  const DOM = new JSDOM(fHTML)
+  global.document = DOM.window.document
+  global.window = DOM.window
+
+  it('createQueryElement function should correctly return an element based on query "#crazy"', () => {
+    const payload = '#crazy'
+
+    // Generates element
+    const element = createQueryElement(payload)
+
+    // Checks if element tagname and id is right
+    expect(element.tagName).toBe('DIV')
+
+    expect(element.id).toBe('crazy')
+  })
+
+  it('createQueryElement function should correctly process a complex query and generate an element with right meta ', () => {
+    const payload = 'span#superId.myclass1.myclass2[attr=2, isCool]|background:red; height:200px; width: 300px;|'
+
+    // Generates element using a complicated query
+    const element = createQueryElement(payload)
+
+    // Checks if element has correct styles, attributes and classes
+    expect(element.tagName).toBe('SPAN')
+
+    expect(element.id).toBe('superId')
+
+    expect(element.classList.contains('myclass1')).toBe(true)
+
+    expect(element.classList.contains('myclass2')).toBe(true)
+
+    expect(element.getAttribute('attr')).toBe('2')
+
+    expect(element.getAttribute('isCool')).toBe('true')
+
+    expect(element.style.background).toBe('red')
+
+    expect(element.style.height).toBe('200px')
+
+    expect(element.style.width).toBe('300px')
   })
 })
