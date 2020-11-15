@@ -2,7 +2,7 @@ import { separateByPattern } from './utils'
 
 const TAG_REGEX = /^[A-Za-z]+?(?=\W)/g
 const CLASSES_REGEX = /\.[A-Za-z0-9_\-|.]+/g
-const ID_REGEX = /#[A-Za-z0-9_\-|.]+/g
+const ID_REGEX = /#[A-Za-z0-9_\-]+/g
 const ATTRIBUTES_REGEX = /\[.+]/
 const STYLES_REGEX = /\|.+\|/
 
@@ -73,4 +73,39 @@ export function extractStyles (query) {
     ';',
     ':'
   )
+}
+
+// TODO: Second param -> where to mount
+// TODO: JSDOCS
+export const createQueryElement = document.createQueryElement = function (query) {
+  // Extracts element meta from the query
+  const tag = extractTagName(query) || 'div'
+  const classes = extractClasses(query)
+  const id = extractId(query)
+  const attrs = extractAttributes(query)
+  const styles = extractStyles(query)
+
+  // Creates a new DOM element
+  const element = document.createElement(tag)
+
+  // Assigns class names to the element
+  classes.forEach((className) => {
+    element.classList.add(className)
+  })
+
+  // Assigns id to the element
+  element.id = id
+
+  // Assigns attributes to the element
+  attrs.forEach(({ key, value }) => {
+    element.setAttribute(key, value)
+  })
+
+  // Assigns styles to the element
+  styles.forEach(({ key, value }) => {
+    element.style[key] = value
+  })
+
+  // Return the generated element
+  return element
 }

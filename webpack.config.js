@@ -22,6 +22,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.SourceMapDevToolPlugin({}),
+    // new webpack.SourceMapDevToolPlugin({}),
   ],
 }
